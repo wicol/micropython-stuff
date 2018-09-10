@@ -17,12 +17,13 @@ class Regulator:
             polarity=0,
             # Write on first edge? Might be 1 depending on how this is implemented
             phase=0,
-            sck=machine.Pin(18),  # Clock
-            mosi=machine.Pin(23),  # SI
-            miso=machine.Pin(19)  # SO (Unused)
+            sck=machine.Pin(18),  # SCK/Clock/Sync
+            mosi=machine.Pin(23),  # (MO)SI - Data in (to MCP)
+            miso=machine.Pin(19)  # (MI)SO - Data out (from MCP) (Unused)
         )
-        self.sspin = machine.Pin(2, machine.Pin.OUT)
-        # Set chip select base level - i think
+        # SPI CS / Chip Select
+        self.sspin = machine.Pin(22, machine.Pin.OUT)
+        # Set chip select base level
         self.sspin.value(True)
         # Set initial value (off)
         self.set_level(0)

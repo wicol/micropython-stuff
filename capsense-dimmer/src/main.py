@@ -14,8 +14,8 @@ tc = TouchController(
 tc.run()
 
 # SPI
-# SCK/Sync: pin 18
-# MOSI: pin 23
-# MISO: pin 19
+# SCK/Sync: GPIO 18
+# MOSI: GPIO 23
+# MISO: GPIO 19
 #
-# CS/Sync: pin 0
+# CS/Sync: GPIO 22
