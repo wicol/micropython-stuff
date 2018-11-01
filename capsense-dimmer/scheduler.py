@@ -1,11 +1,15 @@
 import utime
 
+from logging import logger
+
 
 class Scheduler:
     def __init__(self, sleep_ms, tasks):
         self.sleep_ms = sleep_ms
-        self.interval_tasks = tasks
-        self.scheduled_tasks = []
+        self.interval_tasks = []
+        #self.scheduled_tasks = []
+        for t in tasks:
+            self.set_interval(*t)
 
     def run(self):
         while True:
@@ -15,7 +19,7 @@ class Scheduler:
             if time_spent_on_tasks < self.sleep_ms:
                 utime.sleep_ms(utime.ticks_diff(self.sleep_ms, time_spent_on_tasks))
             else:
-                print('Skipping sleep - spent {}ms on tasks'.format(time_spent_on_tasks))
+                logger.warning('Skipping sleep - spent {}ms on tasks'.format(time_spent_on_tasks))
 
     def perform_tasks(self):
         for t in self.interval_tasks:
