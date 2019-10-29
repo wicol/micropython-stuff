@@ -1,20 +1,19 @@
-def wifi_connect(ssid, password):
-    import network
-    sta_if = network.WLAN(network.STA_IF)
-    if sta_if.isconnected():
-        return False
+import network
 
+
+def wifi_connect(ssid, password):
+    sta_if = network.WLAN(network.STA_IF)
     print('Connecting to network...')
     sta_if.active(True)
     sta_if.connect(ssid, password)
-    while not sta_if.isconnected():
-        pass
-    print('Network config:', sta_if.ifconfig())
-    return True
+
+
+def wifi_connected():
+    sta_if = network.WLAN(network.STA_IF)
+    return sta_if.isconnected()
 
 
 def ifconfig():
-    import network
     sta_if = network.WLAN(network.STA_IF)
     print('Network config:', sta_if.ifconfig())
 

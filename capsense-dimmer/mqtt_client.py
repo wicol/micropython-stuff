@@ -1,4 +1,4 @@
-from umqtt.robust import MQTTClient
+from umqtt.simple import MQTTClient
 
 import config
 

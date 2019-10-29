@@ -51,6 +51,7 @@ fcycle()
 
 
 def publish_state(level):
+    logger.info('Publishing current state: %s' % level)
     try:
         mqtt_client.publish(config.MQTT_GET_TOPIC, level)
     except Exception as e:
@@ -93,31 +94,49 @@ def mqtt_callback(topic, msg):
             pass
 
 
-def check_mqtt():
-    mqtt_client.check_msg()
-
-
-def connect_wifi_and_mqtt(force_mqtt=False):
-    did_connect = wifi_connect(config.WIFI_SSID, config.WIFI_PASSWORD)
-    if did_connect or force_mqtt:
-        utime.sleep_ms(500)
-        # A new connection was established, do the same for MQTT
-        logger.info('Connecting to MQTT...')
-        mqtt_client.set_callback(mqtt_callback)
+def setup_mqtt():
+    logger.info('Connecting to MQTT...')
+    mqtt_client.set_callback(mqtt_callback)
+    try:
         mqtt_client.connect()
         mqtt_client.subscribe(config.MQTT_SET_TOPIC)
         mqtt_client.subscribe(config.MQTT_DEBUG_TOPIC)
+        publish_state(str(fcycle.index))
         logger.info('Connected to MQTT and subscribed.')
+    except OSError:
+        logger.error('Failed setting up MQTT.')
 
 
-connect_wifi_and_mqtt(force_mqtt=True)
-# Report current state
-publish_state(str(fcycle.index))
+def check_mqtt():
+    if not wifi_connected():
+        # print('Wifi not connected, skipping MQTT check')
+        return
+    try:
+        mqtt_client.check_msg()
+    except (OSError, AttributeError):
+        logger.error('Failed checking MQTT')
+
+
+def assert_mqtt_connection():
+    if not wifi_connected():
+        # print('Wifi not connected, skipping MQTT ping')
+        return
+    if not mqtt_client.sock:
+        # It's not set up yet
+        setup_mqtt()
+    try:
+        mqtt_client.ping()
+    except (OSError, AttributeError):
+        print('Failed pinging MQTT, trying to reconnect...')
+        setup_mqtt()
+
+
+wifi_connect(config.WIFI_SSID, config.WIFI_PASSWORD)
 
 scheduler = Scheduler(
     sleep_ms=tc.sample_sleep_ms,
     tasks=[
-        (connect_wifi_and_mqtt, 1000),
+        (assert_mqtt_connection, 10000),
         (check_mqtt, 1000),
         (tc.poll, tc.sample_sleep_ms)
     ]

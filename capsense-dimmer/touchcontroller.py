@@ -42,7 +42,7 @@ class TouchController:
         #    '[{}] Mean: {:04.0f}, Threshold: {:04.0f}, This: {:04.0f}, This weighted: {:04.0f} / {:.0%}'
         #    .format(utime.ticks_ms(), mean, thresh, value, weighted_value, ratio)
         #)
-        logger.debug('{} {} {}'.format(mean, weighted_value, int(ratio*100)))
+        # logger.debug('{} {} {}'.format(mean, weighted_value, int(ratio*100)))
 
         if weighted_value < thresh:
             now = utime.ticks_ms()
