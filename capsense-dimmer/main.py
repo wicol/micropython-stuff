@@ -53,7 +53,8 @@ fcycle()
 def publish_state(level):
     logger.info('Publishing current state: %s' % level)
     try:
-        mqtt_client.publish(config.MQTT_GET_TOPIC, level)
+        # retain=True makes subscribing clients know the current state if they start subbing later
+        mqtt_client.publish(config.MQTT_GET_TOPIC, level, retain=True)
     except Exception as e:
         logger.error('MQTT publish failed: {}'.format(e))
 

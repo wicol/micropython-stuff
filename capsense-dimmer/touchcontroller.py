@@ -33,7 +33,11 @@ class TouchController:
         return int(sum(self.readings) / len(self.readings))
 
     def poll(self):
-        value = self.touchpin.read()
+        try:
+            value = self.touchpin.read()
+        except ValueError:
+            logger.error('Failed reading touchpin')
+            return
         weighted_value = sum(self.readings[-2:] + [value]) / 3
         mean = self.get_current_mean()
         thresh = mean * self.threshold
