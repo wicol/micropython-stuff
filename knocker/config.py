@@ -1,0 +1,14 @@
+WIFI_SSID = 'ssid'
+WIFI_PASSWORD = 'wifi-password'
+MQTT_SERVER = '1.2.3.4'
+MQTT_CLIENT_ID = 'knocker'
+MQTT_USER = 'mqtt-user'
+MQTT_PASSWORD = 'mqtt-password'
+MQTT_KEEPALIVE_INTERVAL = 60
+MQTT_TOPIC = 'knocker/trigger'
+MQTT_TOPIC_CALIBRATE = 'knocker/calibrate'
+MQTT_TOPIC_SEQUENCE = 'knocker/sequence'
+SENSOR_PIN = 5
+#KNOCKER_SEQUENCE = [0, 2, 3, 4, 6, 10, 12]
+#KNOCKER_SEQUENCE = [0, 1, 2, 3, 4, 6, 10, 12]
+KNOCKER_SEQUENCE = [0, 1, 2, 4]
